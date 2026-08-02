@@ -1,0 +1,25 @@
+# Swift / SPM
+.build/
+.swiftpm/
+*.xcodeproj/
+*.xcworkspace/
+DerivedData/
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+
+# 打包产物
+FinderExplorer.app/
+
+# Xcode
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+
+# 临时文件
+*.swp
+*.swo
+*~

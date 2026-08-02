@@ -1,2 +1,79 @@
-# finder-explorer
+# FinderExplorer
 
+一个用 SwiftUI 构建的 macOS 文件管理器，风格类似 Finder，支持树形侧边栏、面包屑导航、多选、内联重命名等功能。
+
+## 功能
+
+- **侧边栏目录树** — 异步加载，支持展开/折叠子文件夹
+- **面包屑地址栏** — 逐级点击跳转到任意父目录
+- **文件列表** — 名称/修改日期/类型/大小四列，支持点击列头排序
+- **搜索过滤** — 实时搜索当前目录下的文件
+- **右键菜单** — 打开、重命名、在 Finder 中显示、复制路径、移到废纸篓
+- **键盘导航** — 上下箭头选择、回车打开、Backspace 返回上级、F2 重命名
+- **多选** — ⌘ Command 追加 / ⇧ Shift 范围选择
+- **内联重命名** — 在列表中直接编辑文件名
+- **新建文件夹** — 快捷创建并自动选中
+- **前进/后退** — 导航历史栈，工具栏按钮操作
+- **废纸篓** — 菜单命令 + ⌫ Delete 快捷键
+
+## 系统要求
+
+- macOS 14.0 (Sonoma) 或更高版本
+
+## 构建 & 运行
+
+### 方式一：直接构建运行
+
+```bash
+./build_and_run.sh
+```
+
+### 方式二：手动构建
+
+```bash
+swift build --disable-sandbox
+open .build/x86_64-apple-macosx/debug/FinderExplorer
+```
+
+## 打包为 .app
+
+```bash
+./package_app.sh
+```
+
+打包后的 `FinderExplorer.app` 可以直接双击运行，或拖入 `/Applications`。
+
+## 项目结构
+
+```
+FinderExplorer/
+├── Package.swift                 # Swift Package Manager 配置
+├── build_and_run.sh              # Debug 构建 + 启动
+├── package_app.sh                # Release 打包 .app
+├── generate_icon.swift           # 用代码生成 App 图标
+└── Sources/FinderExplorer/
+    ├── FinderExplorerApp.swift   # 入口 + 主窗口
+    ├── Models/
+    │   ├── FileItem.swift        # 文件/文件夹数据模型
+    │   ├── SortOptions.swift     # 排序选项与方向
+    │   └── TreeNode.swift        # 侧边栏树节点（异步）
+    ├── Services/
+    │   ├── FileSystemService.swift # 文件操作服务层
+    │   └── NavigationState.swift   # 前进/后退导航栈
+    └── Views/
+        ├── MainContentView.swift  # 主区域整合
+        ├── BreadcrumbBar.swift    # 面包屑地址栏
+        ├── FileListView.swift     # 文件列表 + 右键菜单
+        └── SidebarTreeView.swift  # 侧边栏目录树
+```
+
+## 技术栈
+
+- **SwiftUI** — 原生声明式 UI
+- **AppKit** — `NSWorkspace` 获取文件图标、`NSEvent` 键盘监听
+- **SF Symbols** — 系统图标
+- **Swift 6.0** — 结构化并发 (`async/await`)、`@MainActor`
+
+## 许可
+
+MIT
