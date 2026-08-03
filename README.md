@@ -5,7 +5,7 @@
 ## 功能
 
 - **侧边栏目录树** — 异步加载，支持展开/折叠子文件夹
-- **面包屑地址栏** — 逐级点击跳转到任意父目录
+- **可编辑地址栏** — 点击空白区域切换为文本输入，自动全选，支持复制/粘贴路径，Enter 导航、Esc 取消
 - **文件列表** — 名称/修改日期/类型/大小四列，支持点击列头排序
 - **搜索过滤** — 实时搜索当前目录下的文件
 - **右键菜单** — 打开、重命名、在 Finder 中显示、复制路径、移到废纸篓
@@ -15,6 +15,9 @@
 - **新建文件夹** — 快捷创建并自动选中
 - **前进/后退** — 导航历史栈，工具栏按钮操作
 - **废纸篓** — 菜单命令 + ⌫ Delete 快捷键
+- **目录自动刷新** — 外部文件新增/删除时列表自动更新
+- **关于窗口** — 显示版本号、作者和项目主页链接
+- **版本管理** — AppVersion.swift 统一版本号，窗口标题和打包产物自动同步
 
 ## 系统要求
 
@@ -41,7 +44,7 @@ open .build/x86_64-apple-macosx/debug/FinderExplorer
 ./package_app.sh
 ```
 
-打包后的 `FinderExplorer.app` 可以直接双击运行，或拖入 `/Applications`。
+打包后的 `FinderExplorer-1.0.0.app`（版本号自动从 AppVersion.swift 读取）可以直接双击运行，或拖入 `/Applications`。
 
 ## 项目结构
 
@@ -52,6 +55,7 @@ FinderExplorer/
 ├── package_app.sh                # Release 打包 .app
 ├── generate_icon.swift           # 用代码生成 App 图标
 └── Sources/FinderExplorer/
+    ├── AppVersion.swift          # 版本号定义
     ├── FinderExplorerApp.swift   # 入口 + 主窗口
     ├── Models/
     │   ├── FileItem.swift        # 文件/文件夹数据模型
