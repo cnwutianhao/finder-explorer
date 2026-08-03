@@ -13,6 +13,7 @@ Thumbs.db
 
 # 打包产物
 FinderExplorer.app/
+FinderExplorer-*.app/
 
 # Xcode
 xcuserdata/

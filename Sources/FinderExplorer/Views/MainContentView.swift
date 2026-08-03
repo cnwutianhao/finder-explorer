@@ -18,6 +18,7 @@ struct MainContentView: View {
     @State private var renameText = ""
     @State private var isCreatingFolder = false
     @State private var newFolderText = ""
+    @State private var watcherSource: DispatchSourceFileSystemObject?
     @FocusState private var renameFieldFocused: Bool
     @FocusState private var newFolderFieldFocused: Bool
 
@@ -111,6 +112,7 @@ struct MainContentView: View {
         }
         .onChange(of: showHiddenFiles) { loadFiles() }
         .onAppear { loadFiles() }
+        .onChange(of: currentURL) { _ in startWatcher() }
         .toolbar {
             ToolbarItemGroup(placement: .navigation) {
                 Button(action: {
@@ -226,6 +228,37 @@ struct MainContentView: View {
         selectedURLs = []
         searchText = ""
         isLoading = false
+        startWatcher()
+    }
+
+    /// 监视当前目录变化，外部文件新增/删除时自动刷新列表
+    private func startWatcher() {
+        watcherSource?.cancel()
+        watcherSource = nil
+
+        let fd = open(currentURL.path, O_EVTONLY)
+        guard fd >= 0 else { return }
+
+        let source = DispatchSource.makeFileSystemObjectSource(
+            fileDescriptor: fd,
+            eventMask: [.write, .rename, .delete, .link],
+            queue: .main
+        )
+        source.setEventHandler { [self] in
+            do {
+                let updated = try fsService.listDirectory(at: currentURL, showHidden: showHiddenFiles)
+                if updated.map(\.url) != files.map(\.url) {
+                    withAnimation(.easeInOut(duration: 0.1)) {
+                        files = updated
+                    }
+                }
+            } catch {
+                // 目录可能已被删除，忽略
+            }
+        }
+        source.setCancelHandler { close(fd) }
+        source.resume()
+        watcherSource = source
     }
 
     func refresh() { loadFiles() }
