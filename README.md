@@ -46,6 +46,8 @@ open .build/x86_64-apple-macosx/debug/FinderExplorer
 
 打包后的 `FinderExplorer-1.0.0.app`（版本号自动从 AppVersion.swift 读取）可以直接双击运行，或拖入 `/Applications`。
 
+也可以从 [Releases](https://github.com/cnwutianhao/finder-explorer/releases/tag/1.0.0) 下载预编译版本。
+
 ## 项目结构
 
 ```
