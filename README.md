@@ -2,6 +2,10 @@
 
 一个用 SwiftUI 构建的 macOS 文件管理器，风格类似 Finder，支持树形侧边栏、面包屑导航、多选、内联重命名等功能。
 
+## 截图
+
+![主界面](assets/screenshot-main.png)
+
 ## 相比访达（Finder）的优势
 
 | | Finder | FinderExplorer |
