@@ -36,7 +36,21 @@
 - **关于窗口** — 显示版本号、作者和项目主页链接
 - **版本管理** — AppVersion.swift 统一版本号，窗口标题和打包产物自动同步
 
-## 系统要求
+## 下载
+
+从 [Releases](https://github.com/cnwutianhao/finder-explorer/releases) 下载预编译版本，选择对应架构：
+
+| 下载 | 架构 | 适用 |
+|------|------|------|
+| [FinderExplorer_1.0.1-universal.app.zip](https://github.com/cnwutianhao/finder-explorer/releases/download/1.0.1/FinderExplorer_1.0.1-universal.app.zip) | Universal (arm64 + x86_64) | **推荐**，不确定芯片选这个 |
+| [FinderExplorer_1.0.1-arm64.app.zip](https://github.com/cnwutianhao/finder-explorer/releases/download/1.0.1/FinderExplorer_1.0.1-arm64.app.zip) | arm64 | Apple Silicon (M1/M2/M3/M4) |
+| [FinderExplorer_1.0.1-amd64.app.zip](https://github.com/cnwutianhao/finder-explorer/releases/download/1.0.1/FinderExplorer_1.0.1-amd64.app.zip) | x86_64 | Intel Mac |
+
+> 查看芯片类型：点左上角  → "关于本机" → 看"芯片"一行。
+
+下载解压后，将 `.app` 拖入 `/Applications` 即可使用。
+
+## 系统
 
 - macOS 14.0 (Sonoma) 或更高版本
 
@@ -61,9 +75,9 @@ open .build/x86_64-apple-macosx/debug/FinderExplorer
 ./package_app.sh
 ```
 
-打包后的 `FinderExplorer-1.0.0.app`（版本号自动从 AppVersion.swift 读取）可以直接双击运行，或拖入 `/Applications`。
+打包后的 `FinderExplorer_1.0.1-universal.app`（版本号自动从 AppVersion.swift 读取）可以直接双击运行，或拖入 `/Applications`。
 
-也可以从 [Releases](https://github.com/cnwutianhao/finder-explorer/releases/tag/1.0.0) 下载预编译版本。
+也可以从 [Releases](https://github.com/cnwutianhao/finder-explorer/releases) 下载预编译版本。
 
 ## 项目结构
 
