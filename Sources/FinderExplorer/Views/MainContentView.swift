@@ -9,11 +9,11 @@ struct MainContentView: View {
     @Binding var selectedURLs: Set<URL>
     @Binding var clipboardURLs: [URL]
     @Binding var clipboardIsCut: Bool
+    @Binding var showHiddenFiles: Bool
     let navigationState: NavigationState
     let fsService: FileSystemService
 
     @State private var isLoading = false
-    @State private var showHiddenFiles = false
     @State private var searchText = ""
     @State private var isRenaming = false
     @State private var renameTarget: URL?

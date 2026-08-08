@@ -59,6 +59,7 @@ struct FinderExplorerApp: App {
     @State private var selectedURLs: Set<URL> = []
     @State private var clipboardURLs: [URL] = []
     @State private var clipboardIsCut = false
+    @State private var showHiddenFiles = false
 
     private let fsService = FileSystemService()
 
@@ -70,7 +71,7 @@ struct FinderExplorerApp: App {
             clipboardURLs = []
             clipboardIsCut = false
         }
-        files = (try? fsService.listDirectory(at: currentURL)) ?? []
+        files = (try? fsService.listDirectory(at: currentURL, showHidden: showHiddenFiles)) ?? []
     }
 
     @State private var aboutWindow: NSWindow?
@@ -123,7 +124,7 @@ struct FinderExplorerApp: App {
                     onSelect: { url in
                         navigationState.push(currentURL)
                         currentURL = url
-                        files = (try? fsService.listDirectory(at: url)) ?? []
+                        files = (try? fsService.listDirectory(at: url, showHidden: showHiddenFiles)) ?? []
                         selectedURLs = []
                     }
                 )
@@ -138,6 +139,7 @@ struct FinderExplorerApp: App {
                     selectedURLs: $selectedURLs,
                     clipboardURLs: $clipboardURLs,
                     clipboardIsCut: $clipboardIsCut,
+                    showHiddenFiles: $showHiddenFiles,
                     navigationState: navigationState,
                     fsService: fsService
                 )
@@ -158,6 +160,13 @@ struct FinderExplorerApp: App {
                 Button("关于 FinderExplorer") {
                     showAboutWindow()
                 }
+            }
+
+            CommandGroup(after: .toolbar) {
+                Button(showHiddenFiles ? "隐藏隐藏项目" : "显示隐藏项目") {
+                    showHiddenFiles.toggle()
+                }
+                .keyboardShortcut(".", modifiers: [.command, .shift])
             }
 
             CommandGroup(after: .pasteboard) {
@@ -187,7 +196,7 @@ struct FinderExplorerApp: App {
                 Button("移到废纸篓") {
                     let urls = selectedURLs.isEmpty ? [] : Array(selectedURLs)
                     fsService.moveToTrash(urls)
-                    files = (try? fsService.listDirectory(at: currentURL)) ?? []
+                    files = (try? fsService.listDirectory(at: currentURL, showHidden: showHiddenFiles)) ?? []
                 }
                 .keyboardShortcut(.delete, modifiers: [])
             }

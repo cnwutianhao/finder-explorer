@@ -88,8 +88,10 @@ struct BreadcrumbBar: View {
     }
 
     private func commitEdit() {
-        let path = editPath.trimmingCharacters(in: .whitespaces)
-        guard !path.isEmpty else { cancelEdit(); return }
+        let raw = editPath.trimmingCharacters(in: .whitespaces)
+        guard !raw.isEmpty else { cancelEdit(); return }
+        // 展开 ~ 为用户主目录，与终端行为一致
+        let path = (raw as NSString).expandingTildeInPath
         let url = URL(fileURLWithPath: path)
         var isDir: ObjCBool = false
         if FileManager.default.fileExists(atPath: path, isDirectory: &isDir), isDir.boolValue {

@@ -50,8 +50,22 @@ final class FileSystemService {
         ].map { FileItem(url: $0) }
     }
 
-    /// 将文件移动到废纸篓
+    /// 将文件移动到废纸篓（先弹窗确认）
+    @MainActor
     func moveToTrash(_ urls: [URL]) {
+        guard !urls.isEmpty else { return }
+
+        let alert = NSAlert()
+        alert.messageText = "移到废纸篓"
+        alert.informativeText = urls.count == 1
+            ? "确定要将「\(urls[0].lastPathComponent)」移到废纸篓吗？"
+            : "确定要将这 \(urls.count) 个项目移到废纸篓吗？"
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "移到废纸篓")
+        alert.addButton(withTitle: "取消")
+        alert.buttons[1].keyEquivalent = "\u{1b}" // Esc
+        guard alert.runModal() == .alertFirstButtonReturn else { return }
+
         for url in urls {
             try? FileManager.default.trashItem(at: url, resultingItemURL: nil)
         }

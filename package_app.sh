@@ -28,7 +28,7 @@ build_arch () {
     <key>CFBundleExecutable</key>
     <string>FinderExplorer</string>
     <key>CFBundleIdentifier</key>
-    <string>com.finderexplorer.app</string>
+    <string>com.tyhoo.finderexplorer</string>
     <key>CFBundleName</key>
     <string>FinderExplorer</string>
     <key>CFBundleDisplayName</key>
@@ -76,7 +76,7 @@ build_universal () {
     <key>CFBundleExecutable</key>
     <string>FinderExplorer</string>
     <key>CFBundleIdentifier</key>
-    <string>com.finderexplorer.app</string>
+    <string>com.tyhoo.finderexplorer</string>
     <key>CFBundleName</key>
     <string>FinderExplorer</string>
     <key>CFBundleDisplayName</key>
