@@ -30,6 +30,7 @@
 - **多选** — ⌘ Command 追加 / ⇧ Shift 范围选择
 - **内联重命名** — 在列表中直接编辑文件名
 - **新建文件夹** — 快捷创建并自动选中
+- **复制/剪切/粘贴** — ⌘C 复制 / ⌘X 剪切 / ⌘V 粘贴，行为与 Windows 一致：复制可连续粘贴到多个目录，剪切粘贴后清空；同名自动加「副本」后缀；被剪切的文件半透明显示
 - **前进/后退** — 导航历史栈，工具栏按钮操作
 - **废纸篓** — 菜单命令 + ⌫ Delete 快捷键
 - **目录自动刷新** — 外部文件新增/删除时列表自动更新
@@ -42,9 +43,9 @@
 
 | 下载 | 架构 | 适用 |
 |------|------|------|
-| [FinderExplorer_1.0.1-universal.app.zip](https://github.com/cnwutianhao/finder-explorer/releases/download/1.0.1/FinderExplorer_1.0.1-universal.app.zip) | Universal (arm64 + x86_64) | **推荐**，不确定芯片选这个 |
-| [FinderExplorer_1.0.1-arm64.app.zip](https://github.com/cnwutianhao/finder-explorer/releases/download/1.0.1/FinderExplorer_1.0.1-arm64.app.zip) | arm64 | Apple Silicon (M1/M2/M3/M4) |
-| [FinderExplorer_1.0.1-amd64.app.zip](https://github.com/cnwutianhao/finder-explorer/releases/download/1.0.1/FinderExplorer_1.0.1-amd64.app.zip) | x86_64 | Intel Mac |
+| [FinderExplorer_1.1.0-universal.app.zip](https://github.com/cnwutianhao/finder-explorer/releases/download/1.1.0/FinderExplorer_1.1.0-universal.app.zip) | Universal (arm64 + x86_64) | **推荐**，不确定芯片选这个 |
+| [FinderExplorer_1.1.0-arm64.app.zip](https://github.com/cnwutianhao/finder-explorer/releases/download/1.1.0/FinderExplorer_1.1.0-arm64.app.zip) | arm64 | Apple Silicon (M1/M2/M3/M4) |
+| [FinderExplorer_1.1.0-amd64.app.zip](https://github.com/cnwutianhao/finder-explorer/releases/download/1.1.0/FinderExplorer_1.1.0-amd64.app.zip) | x86_64 | Intel Mac |
 
 > 查看芯片类型：点左上角  → "关于本机" → 看"芯片"一行。
 
@@ -75,7 +76,7 @@ open .build/x86_64-apple-macosx/debug/FinderExplorer
 ./package_app.sh
 ```
 
-打包后的 `FinderExplorer_1.0.1-universal.app`（版本号自动从 AppVersion.swift 读取）可以直接双击运行，或拖入 `/Applications`。
+打包后的 `FinderExplorer_1.1.0-universal.app`（版本号自动从 AppVersion.swift 读取）可以直接双击运行，或拖入 `/Applications`。
 
 也可以从 [Releases](https://github.com/cnwutianhao/finder-explorer/releases) 下载预编译版本。
 
