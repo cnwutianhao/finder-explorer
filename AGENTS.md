@@ -33,31 +33,16 @@ Not lazy about: understanding the problem (read it fully and trace the real flow
 
 ## Project: FinderExplorer
 
-- **Language**: Swift 6.0 · **UI**: SwiftUI + AppKit · **Min**: macOS 14.0
-- **Build**: `swift build --disable-sandbox` (SPM)
-- **No third-party Swift packages**. Foundation/AppKit/SwiftUI cover everything.
+- **Language**: Swift 6.0 · **UI**: SwiftUI + AppKit · **Min**: macOS 14.0 · **Packages**: none (zero third-party deps, Foundation/AppKit/SwiftUI only)
+- **Debug build**: `swift build --disable-sandbox`
+- **Release packaging**: `./package_app.sh` produces three architectures — `FinderExplorer_<ver>-amd64.app`, `-arm64.app`, `-universal.app`. Universal binary lives in `.build/apple/Products/Release/`, single-arch in `.build/<arch>-apple-macosx/release/`.
+- **Versioning**: `Sources/FinderExplorer/AppVersion.swift` is the single source of truth (`marketing` + `build`). Bump it there only — window title and `Info.plist` (via `package_app.sh` grep) sync automatically. Never hardcode a version elsewhere.
 - `@MainActor` on every ObservableObject.
-- All file ops through `FileSystemService`, never `FileManager.default` directly.
-- SF Symbols for icons, `NSWorkspace.icon(forFile:)` for file icons.
+- Reusable file operations live in `FileSystemService` — reuse it for CRUD/trash/reveal/copy-path instead of duplicating logic. One-off filesystem probes (`fileExists`, `open` with `O_EVTONLY` for watching) may use Foundation directly.
+- Icons: SF Symbols for generic UI, `NSWorkspace.icon(forFile:)` for real file icons.
+- Directory changes are watched via `DispatchSource.makeFileSystemObjectSource` + `O_EVTONLY` in `MainContentView.startWatcher()` — reuse this pattern for any new file-watching need.
 
 ---
-
-## AI MAX workflow commands
-
-Use `/aimax:auto` to auto-route any task. Available:
-
-| Command | When |
-|---------|------|
-| `/aimax:plan` | New feature / big refactor |
-| `/aimax:tdd` | New feature or bug fix (tests first) |
-| `/aimax:code-review` | Before commit / quality check |
-| `/aimax:build-fix` | Build or type errors |
-| `/aimax:refactor-clean` | Dead code, DRY, cleanup |
-| `/aimax:update-docs` | README, API docs |
-| `/aimax:test-coverage` | Coverage report |
-| `/aimax:e2e` | End-to-end browser tests |
-
-Recommended flow: `/aimax:plan` → `/aimax:tdd` → `/aimax:code-review` → `/aimax:build-fix` → commit.
 
 ## Git commits
 
@@ -66,4 +51,4 @@ Recommended flow: `/aimax:plan` → `/aimax:tdd` → `/aimax:code-review` → `/
 
 <optional body>
 ```
-Types: feat, fix, refactor, docs, test, chore. No emoji, keep it professional.
+Types: feat, fix, refactor, docs, test, chore. No emoji, keep it professional. Release notes and README user-facing text in Chinese; commit messages in English.
