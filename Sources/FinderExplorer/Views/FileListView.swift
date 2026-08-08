@@ -7,6 +7,8 @@ struct FileListView: View {
     @Binding var sortOption: SortOption
     @Binding var sortDirection: SortDirection
     @Binding var selectedURLs: Set<URL>
+    @Binding var clipboardURLs: [URL]
+    @Binding var clipboardIsCut: Bool
     @Binding var currentURL: URL
     @Binding var showHiddenFiles: Bool
     let onNavigate: (URL) -> Void
@@ -86,6 +88,7 @@ struct FileListView: View {
                                                 file: file,
                                                 isSelected: selectedURLs.contains(file.url),
                                                 isFocused: focusedRowIndex == index,
+                                                isCut: clipboardIsCut && clipboardURLs.contains(file.url),
                                                 onDoubleClick: {
                                                     if file.isDirectory { onNavigate(file.url) }
                                                     else { fsService.openFile(file.url) }
@@ -312,6 +315,17 @@ struct FileListView: View {
             startCreateFolder()
         }
 
+        Button("粘贴") {
+            guard !clipboardURLs.isEmpty else { return }
+            let executed = fsService.pasteItems(clipboardURLs, to: currentURL, isCut: clipboardIsCut)
+            if clipboardIsCut && executed {
+                clipboardURLs = []
+                clipboardIsCut = false
+            }
+            onRefresh()
+        }
+        .disabled(clipboardURLs.isEmpty)
+
         Divider()
 
         Button(showHiddenFiles ? "不显示隐藏项目" : "显示隐藏项目") {
@@ -323,6 +337,18 @@ struct FileListView: View {
     private func contextMenu(for file: FileItem) -> some View {
         Button("打开") {
             if file.isDirectory { onNavigate(file.url) } else { fsService.openFile(file.url) }
+        }
+
+        Divider()
+
+        Button("复制") {
+            clipboardURLs = selectedURLs.isEmpty ? [file.url] : Array(selectedURLs)
+            clipboardIsCut = false
+        }
+
+        Button("剪切") {
+            clipboardURLs = selectedURLs.isEmpty ? [file.url] : Array(selectedURLs)
+            clipboardIsCut = true
         }
 
         Divider()
@@ -417,6 +443,7 @@ struct FileRow: View {
     let file: FileItem
     let isSelected: Bool
     let isFocused: Bool
+    let isCut: Bool
     let onDoubleClick: () -> Void
     let onClick: () -> Void
 
@@ -446,6 +473,7 @@ struct FileRow: View {
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
+        .opacity(isCut ? 0.45 : 1.0)
         .contentShape(Rectangle())
         .onTapGesture(count: 2) { onDoubleClick() }
         .onTapGesture(count: 1) { onClick() }

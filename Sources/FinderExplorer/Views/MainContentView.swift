@@ -7,6 +7,8 @@ struct MainContentView: View {
     @Binding var sortOption: SortOption
     @Binding var sortDirection: SortDirection
     @Binding var selectedURLs: Set<URL>
+    @Binding var clipboardURLs: [URL]
+    @Binding var clipboardIsCut: Bool
     let navigationState: NavigationState
     let fsService: FileSystemService
 
@@ -89,6 +91,8 @@ struct MainContentView: View {
                     sortOption: $sortOption,
                     sortDirection: $sortDirection,
                     selectedURLs: $selectedURLs,
+                    clipboardURLs: $clipboardURLs,
+                    clipboardIsCut: $clipboardIsCut,
                     currentURL: $currentURL,
                     showHiddenFiles: $showHiddenFiles,
                     onNavigate: { url in

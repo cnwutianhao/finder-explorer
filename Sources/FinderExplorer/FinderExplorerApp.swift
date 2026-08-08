@@ -57,8 +57,21 @@ struct FinderExplorerApp: App {
     @State private var sortOption: SortOption = .name
     @State private var sortDirection: SortDirection = .ascending
     @State private var selectedURLs: Set<URL> = []
+    @State private var clipboardURLs: [URL] = []
+    @State private var clipboardIsCut = false
 
     private let fsService = FileSystemService()
+
+    /// 粘贴：剪切则移动（执行后清空），复制则保留（可多次粘贴）；取消时保留剪贴板
+    private func paste() {
+        guard !clipboardURLs.isEmpty else { return }
+        let executed = fsService.pasteItems(clipboardURLs, to: currentURL, isCut: clipboardIsCut)
+        if clipboardIsCut && executed {
+            clipboardURLs = []
+            clipboardIsCut = false
+        }
+        files = (try? fsService.listDirectory(at: currentURL)) ?? []
+    }
 
     @State private var aboutWindow: NSWindow?
 
@@ -123,6 +136,8 @@ struct FinderExplorerApp: App {
                     sortOption: $sortOption,
                     sortDirection: $sortDirection,
                     selectedURLs: $selectedURLs,
+                    clipboardURLs: $clipboardURLs,
+                    clipboardIsCut: $clipboardIsCut,
                     navigationState: navigationState,
                     fsService: fsService
                 )
@@ -146,6 +161,29 @@ struct FinderExplorerApp: App {
             }
 
             CommandGroup(after: .pasteboard) {
+                Button("复制") {
+                    clipboardURLs = Array(selectedURLs)
+                    clipboardIsCut = false
+                }
+                .keyboardShortcut("c", modifiers: .command)
+                .disabled(selectedURLs.isEmpty)
+
+                Button("剪切") {
+                    clipboardURLs = Array(selectedURLs)
+                    clipboardIsCut = true
+                    selectedURLs = []
+                }
+                .keyboardShortcut("x", modifiers: .command)
+                .disabled(selectedURLs.isEmpty)
+
+                Button("粘贴") {
+                    paste()
+                }
+                .keyboardShortcut("v", modifiers: .command)
+                .disabled(clipboardURLs.isEmpty)
+
+                Divider()
+
                 Button("移到废纸篓") {
                     let urls = selectedURLs.isEmpty ? [] : Array(selectedURLs)
                     fsService.moveToTrash(urls)
